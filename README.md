@@ -1,16 +1,49 @@
-# expenses
+# ExpenseApp
 
-A new Flutter project.
+This is a simple Flutter app for tracking personal expenses.
+
+## Features
+
+- Add expenses with title, amount, and date.
+- View the list of recorded expenses.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Kaued/ExpenseApp.git
+   ```
 
-A few resources to get you started if this is your first Flutter project:
+2. Navigate to the project directory:
+   ```bash
+   cd ExpenseApp
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. Run the app:
+   ```bash
+   flutter run
+   ```
+
+## Requirements
+
+- Flutter (Make sure to have Flutter installed in your environment. For installation instructions, refer to the [official Flutter documentation](https://flutter.dev/docs/get-started/install))
+- Optional: Emulator (e.g., Android Studio) if you want to run the app on a virtual device.
+
+## Deploy
+
+To deploy the project, follow the standard Flutter instructions for your desired platform. For example, to deploy to Android, use the following command:
+
+```bash
+flutter build apk
+```
+
+This will create an APK file in the `build/app/outputs/flutter-apk/` directory that you can install on Android devices.
+
+---
+
+**Note:** Make sure to have the Flutter SDK installed in your environment before running the commands above.
