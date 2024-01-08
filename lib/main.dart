@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:expenses/models/transaction.dart';
@@ -18,11 +19,25 @@ class ExpenseApp extends StatelessWidget {
     return MaterialApp(
       home: const MyHomePage(),
       theme: theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          primary: Colors.purple,
-          secondary: Colors.amber,
-        ),
-      ),
+          colorScheme: theme.colorScheme.copyWith(
+            primary: Colors.purple,
+            secondary: Colors.amber,
+          ),
+          textTheme: theme.textTheme.copyWith(
+            titleLarge: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: "OpenSans",
+              fontSize: 18,
+              color: Colors.black,
+            ),
+          ),
+          appBarTheme: const AppBarTheme(
+            titleTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: "OpenSans",
+              fontSize: 20,
+            ),
+          )),
     );
   }
 }
@@ -35,26 +50,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _transaction = [
-    Transaction(
-      id: "t1",
-      title: "Tênis de corrida",
-      date: DateTime.now(),
-      value: 300,
-    ),
-    Transaction(
-      id: "t2",
-      title: "Conta de luz",
-      date: DateTime.now(),
-      value: 100,
-    ),
-  ];
+  final List<Transaction> _transaction = [];
 
-  void addTransaction(String title, double value) {
+  List<Transaction> get _recentTransaction {
+    return _transaction
+        .where(
+          (element) => element.date.isAfter(
+            DateTime.now().subtract(
+              const Duration(days: 7),
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  void addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
-      date: DateTime.now(),
+      date: date,
       value: value,
     );
 
@@ -83,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             onPressed: () => _openTransactionModal(context),
             icon: const Icon(Icons.add),
+            color: Colors.white,
           ),
         ],
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -92,12 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             SizedBox(
               width: double.infinity,
-              child: Card(
-                color: Theme.of(context).colorScheme.primary,
-                elevation: 5,
-                child: const Text(
-                  "Gráfico",
-                ),
+              child: Chart(
+                recentTransactions: _recentTransaction,
               ),
             ),
             TransactionList(_transaction),
