@@ -1,5 +1,7 @@
+import 'package:expenses/components/adaptiveButton.dart';
+import 'package:expenses/components/adaptiveTextField.dart';
+import 'package:expenses/components/adaptive_date_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
@@ -30,87 +32,51 @@ class _TransactionFormState extends State<TransactionForm> {
     widget.onSubmit(title, value, date);
   }
 
-  _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-    ).then((value) {
-      if (value == null) {
-        return;
-      }
-
-      setState(() {
-        _selectDate = value;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: "Título",
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            children: [
+              AdaptiveTextField(
+                controller: _titleController,
+                label: "Título",
+                onSubmit: submitForm,
               ),
-              onSubmitted: (_) => submitForm(),
-            ),
-            TextField(
-              controller: _valueController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              decoration: const InputDecoration(
-                labelText: "Valor (R\$)",
-              ),
-              onSubmitted: (_) => submitForm(),
-            ),
-            SizedBox(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _selectDate == null
-                          ? "Nenhuma data Selecionada!"
-                          : "Data Selecionada: ${DateFormat("dd/MM/y").format(_selectDate!)}",
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _showDatePicker,
-                    child: Text(
-                      "Selecionar Data",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text(
-                    "Nova transação",
-                  ),
+              AdaptiveTextField(
+                controller: _valueController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
                 ),
-              ],
-            )
-          ],
+                label: "Valor (em R\$)",
+                onSubmit: submitForm,
+              ),
+              AdaptiveDatePicker(
+                  selectDate: _selectDate,
+                  onDateChange: (DateTime date) {
+                    setState(() {
+                      _selectDate = date;
+                    });
+                  }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  AdaptiveButton(
+                    onPressed: submitForm,
+                    label: "Nova transação",
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
